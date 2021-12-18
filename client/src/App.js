@@ -6,10 +6,11 @@ import ConversationComponent from "./components/ConversationComponent";
 const Container = styled.div`
   display: flex;
   height: 100vh;
-  width: 100%;
+  width: 100vw !importent;
   flex-direction: row;
   align-items: center;
   background: #f8f9fb;
+  border:1px solid red;
 `;
 
 const ChatPlaceholder = styled.img`
