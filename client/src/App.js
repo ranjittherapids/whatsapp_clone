@@ -10,7 +10,6 @@ const Container = styled.div`
   flex-direction: row;
   align-items: center;
   background: #f8f9fb;
-  border:1px solid red;
 `;
 
 const ChatPlaceholder = styled.img`

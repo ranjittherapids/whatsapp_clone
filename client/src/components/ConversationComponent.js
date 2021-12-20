@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { SearchContainer, SearchInput } from "./ContactListComponent";
+import { SearchContainer} from "./ContactListComponent";
 import Picker from "emoji-picker-react";
 import { messagesList } from "../mockData";
-
+import Send from '@material-ui/icons/Send';
+import Mic from '@material-ui/icons/Mic';
+import AttachFile from '@material-ui/icons/AttachFile';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -46,7 +48,15 @@ const ChatBox = styled.div`
   padding: 10px;
   align-items: center;
   bottom: 0;
+  position:relative;
 `;
+const SearchInput=styled.input`
+width: 100%;
+padding:5px;
+outline: none;
+border: none;
+font-size: 15px;
+`
 const MessageContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -59,6 +69,11 @@ const MessageDiv = styled.div`
   justify-content: ${(props) => (props.isYours ? "flex-end" : "flex-start")};
   margin: 5px 15px;
 `;
+const SendIcon=styled.div`
+display: flex;
+color: #303030;
+margin:0px 10px;
+`
 const Message = styled.div`
   background: ${(props) => (props.isYours ? "#daf8cb" : "white")};
   padding: 8px 10px;
@@ -72,6 +87,7 @@ const EmojiImage = styled.img`
   height: 28px;
   border-radius: 50%;
   opacity: 0.4;
+  margin:0px 5px;
   cursor: pointer;
 `;
 function ConversationComponent(props) {
@@ -79,8 +95,10 @@ function ConversationComponent(props) {
   const [text, setText] = useState("");
   const [pickerVisible, togglePicker] = useState(false);
   const [messageList, setMessageList] = useState(messagesList);
+  const [sendvoiceicon, setsendvoiceicon] = useState(false)
 
   const onEnterPress = (event) => {
+    setsendvoiceicon(false)
     if (event.key === "Enter") {
       const messages = [...messageList];
       messages.push({
@@ -94,6 +112,19 @@ function ConversationComponent(props) {
       setText("");
     }
   };
+  const sendMessage=()=>{
+    const messages = [...messageList];
+    messages.push({
+      id: 0,
+      messageType: "TEXT",
+      text,
+      senderID: 0,
+      addedOn: "12:02 PM",
+    });
+    setMessageList(messages);
+    setsendvoiceicon(false)
+    setText("");
+  }
   return (
     <Container>
       <ProfileHeader>
@@ -106,34 +137,49 @@ function ConversationComponent(props) {
         {messageList.map((messageData) => (
           <MessageDiv isYours={messageData.senderID === 0}>
             <Message isYours={messageData.senderID === 0}>
-              {[messageData.text]}
+              {messageData.text}
             </Message>
           </MessageDiv>
         ))}
       </MessageContainer>
 
       <ChatBox>
-        <SearchContainer>
-          {pickerVisible && (
+      {pickerVisible && (
             <Picker
-              pickerStyle={{ position: "absolute", bottom: "60px" }}
+              pickerStyle={{ position: "absolute",
+              left:"0px",
+              width:"100%",
+               bottom: "60px" }}
               onEmojiClick={(e, emoji) => {
                   setText(text + emoji.emoji)
                   togglePicker(false)
               }}
             />
           )}
-          <EmojiImage
+      <EmojiImage
             src={"/whatsapp-clone/data.svg"}
             onClick={() => togglePicker((pickerVisible) => !pickerVisible)}
           />
+          <AttachFile style={{
+            color:"gray",
+            margin:"0px 10px",
+            transform:"rotate(45deg)"
+            }}/>
+        <SearchContainer>      
           <SearchInput
             placeholder="Type a message"
             value={text}
             onKeyDown={onEnterPress}
-            onChange={(e) => setText(e.target.value)}
-          />
+            onChange={(e) =>{
+              if(e.target.value.length==0){setsendvoiceicon(false)}
+              else{setsendvoiceicon(true)}
+              setText(e.target.value)        
+            } }
+          /> 
         </SearchContainer>
+        <SendIcon  >
+       {sendvoiceicon?<Send onClick={sendMessage}/>:<Mic/>}
+       </SendIcon>
       </ChatBox>
     </Container>
   );

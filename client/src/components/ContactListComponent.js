@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import { contactList } from "../mockData";
-
+import MoreVert from '@material-ui/icons/MoreVert';
+import Chat from '@material-ui/icons/Chat';
+import SupervisedUserCircle from '@material-ui/icons/SupervisedUserCircle';
+import './ContactListComponent.css'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -14,6 +17,9 @@ const Container = styled.div`
 const ProfileInfoDiv = styled.div`
   display: flex;
   flex-direction: row;
+  align-items:center;
+  justify-content:space-between;
+  color:gray;
   background: #ededed;
   padding: 10px;
 `;
@@ -85,8 +91,8 @@ const MessageTime = styled.span`
 `;
 
 const ProfileImage = styled.img`
-  width: 32px;
-  height: 32px;
+  width:50px;
+  height:50px;
   border-radius: 50%;
 `;
 const ProfileIcon = styled(ProfileImage)`
@@ -98,6 +104,9 @@ const ProfileIcon = styled(ProfileImage)`
   margin-bottom: 15px;
   object-fit: cover;
 `;
+const ProfileInfoDivLeft=styled.div`
+ 
+`
 const ContactComponent = (props) => {
   const { userData, setChat } = props;
   return (
@@ -115,7 +124,14 @@ function ContactListComponent(props) {
   return (
     <Container>
       <ProfileInfoDiv>
-        <ProfileImage src={"/whatsapp-clone/profile/theindiandev.jpeg"} />
+        <ProfileImage src={"/whatsapp-clone/profile/s.jpeg"} />
+        <ProfileInfoDivLeft>
+        <SupervisedUserCircle  className="profiledivicon"/>
+        <Chat className="profiledivicon"/>
+        <MoreVert className="profiledivicon"/>
+        </ProfileInfoDivLeft>
+     
+        
       </ProfileInfoDiv>
       <SearchBox>
         <SearchContainer>
