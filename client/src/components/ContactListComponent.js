@@ -122,7 +122,6 @@ const ContactComponent = (props) => {
 };
 function ContactListComponent(props) {
   const {allusers}=props
-  console.log(allusers)
   return (
     <Container>
       <ProfileInfoDiv>

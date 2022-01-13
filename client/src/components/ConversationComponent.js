@@ -2,7 +2,7 @@ import React, { useState,useEffect, useRef } from "react";
 import styled from "styled-components";
 import { SearchContainer} from "./ContactListComponent";
 import Picker from "emoji-picker-react";
-import { messagesList } from "../mockData";
+//import { messagesList } from "../mockData";
 import Send from '@material-ui/icons/Send';
 import Mic from '@material-ui/icons/Mic';
 import AttachFile from '@material-ui/icons/AttachFile';
@@ -92,46 +92,46 @@ const EmojiImage = styled.img`
   cursor: pointer;
 `;
 function ConversationComponent(props) {
-  const {socket,selectedChat } = props;
-  const [text, setText] = useState("");
+  const {arivalmessage,socket,selectedChat } = props;
+  const [text, setText] = useState('');
   const [pickerVisible, togglePicker] = useState(false);
-  const [messageList, setMessageList] = useState(messagesList);
+  const [messageList, setMessageList] = useState([]);
+  const [receiverId, setreceiverId] = useState('');
   const [sendvoiceicon, setsendvoiceicon] = useState(false)
    const scrollref = useRef( )
   const onEnterPress = (event) => {
     setsendvoiceicon(false)
     if (event.key === "Enter") {
       const messages = [...messageList];
-      messages.push({
-        id: 0,
-        messageType: "TEXT",
-        text,
-        senderID: 0,
-        addedOn: "12:02 PM",
-      });
-      setMessageList(messages);
+      const sender = sessionStorage.getItem("user");
       setText("");
-      socket.current.emit('sendmessage')
+      socket.current.emit('sendmessage',{
+        senderId:sender,
+        receiverId:receiverId,
+        text:text
+      })
+     
     }
   };
   const sendMessage=()=>{
-    const messages = [...messageList];
-    messages.push({
-      id: 0,
-      messageType: "TEXT",
-      text,
-      senderID: 0,
-      addedOn: "12:02 PM",
-    });
-    
-    setMessageList(messages);
+    socket.current.emit('sendmessage',{
+      senderId:"ranjit",
+      receiverId:receiverId,
+      text:text
+    })
+  
     setsendvoiceicon(false)
     setText("");
   }
+  useEffect(()=>{
+    setreceiverId(selectedChat.userId)
+  //  console.log(selectedChat,'selectedChat')
+  },[selectedChat])
 
   useEffect(() => {
-    scrollref?.current.scrollIntoView({behavior:"smooth"}) 
+    scrollref?.current?.scrollIntoView({behavior:"smooth"}) 
   }, [messageList])
+ 
   return (
     <Container>
       <ProfileHeader>
@@ -143,9 +143,9 @@ function ConversationComponent(props) {
       <MessageContainer>
         {messageList.map((messageData) => (
           <div ref={scrollref}>
-      <MessageDiv isYours={messageData.senderID === 0}>
-            <Message isYours={messageData.senderID === 0}>
-              {messageData.text}
+      <MessageDiv isYours={messageData?.senderId === 0}>
+            <Message isYours={messageData?.senderId === 0}>
+              {messageData?.text}
             </Message>
           </MessageDiv>
           </div>
