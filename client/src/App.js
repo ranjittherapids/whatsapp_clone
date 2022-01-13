@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useRef } from "react";
 import styled from "styled-components";
 import ContactListComponent from "./components/ContactListComponent";
 import ConversationComponent from "./components/ConversationComponent";
-
+import { io } from "socket.io-client";
+import { contactList } from "./mockData";
 const Container = styled.div`
   display: flex;
   height: 100vh;
@@ -34,16 +35,38 @@ const Placeholder = styled.div`
 `;
 function App() {
   const [selectedChat, setChat] = useState();
+  const [adduser,setadduser]= useState();
+  const [allusers, setallusers] = useState([])
+  const [ok,setok]= useState(false);
+
+  const socket = useRef(io('ws://localhost:8000'))
+ 
+  // useEffect(() => {
+  //   socket.current.emit('adduser',user_id)
+  // },[user])
+  useEffect(() => {
+    console.log(adduser)
+    socket.current.emit('adduser',{userId:adduser})
+    socket.current.on('getuser',user=>setallusers(user))
+  },[ok])
+  useEffect(() => {
+    socket.current.on('getuser',user=>setallusers(user))
+  },[])
+  // useEffect(() => {
+  //   console.log(selectedChat,'selectedChat')
+  // },[selectedChat])
   return (
     <Container>
-      <ContactListComponent setChat={setChat} />
+      <ContactListComponent allusers={allusers} setChat={setChat} />
       {selectedChat ? (
-        <ConversationComponent selectedChat={selectedChat} />
+        <ConversationComponent socket={socket} selectedChat={selectedChat} />
       ) : (
         <Placeholder>
           <ChatPlaceholder src="/whatsapp-clone/welcome-placeholder.jpeg" />
           <span>Keep your phone connected</span>
           WhatsApp connects to your phone to sync messages.
+          <input onChange={(e)=>{setadduser(e.target.value)}} value={adduser} type='number' placeholder="add user" />
+      <button onClick={()=>setok(pre=>!pre)}>add</button>
         </Placeholder>
       )}
     </Container>

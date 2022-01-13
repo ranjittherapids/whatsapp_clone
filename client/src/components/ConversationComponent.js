@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect, useRef } from "react";
 import styled from "styled-components";
 import { SearchContainer} from "./ContactListComponent";
 import Picker from "emoji-picker-react";
@@ -6,6 +6,7 @@ import { messagesList } from "../mockData";
 import Send from '@material-ui/icons/Send';
 import Mic from '@material-ui/icons/Mic';
 import AttachFile from '@material-ui/icons/AttachFile';
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -91,12 +92,12 @@ const EmojiImage = styled.img`
   cursor: pointer;
 `;
 function ConversationComponent(props) {
-  const { selectedChat } = props;
+  const {socket,selectedChat } = props;
   const [text, setText] = useState("");
   const [pickerVisible, togglePicker] = useState(false);
   const [messageList, setMessageList] = useState(messagesList);
   const [sendvoiceicon, setsendvoiceicon] = useState(false)
-
+   const scrollref = useRef( )
   const onEnterPress = (event) => {
     setsendvoiceicon(false)
     if (event.key === "Enter") {
@@ -110,6 +111,7 @@ function ConversationComponent(props) {
       });
       setMessageList(messages);
       setText("");
+      socket.current.emit('sendmessage')
     }
   };
   const sendMessage=()=>{
@@ -121,25 +123,33 @@ function ConversationComponent(props) {
       senderID: 0,
       addedOn: "12:02 PM",
     });
+    
     setMessageList(messages);
     setsendvoiceicon(false)
     setText("");
   }
+
+  useEffect(() => {
+    scrollref?.current.scrollIntoView({behavior:"smooth"}) 
+  }, [messageList])
   return (
     <Container>
       <ProfileHeader>
         <ProfileInfo>
           <ProfileImage src={selectedChat.profilePic} />
-          <ContactName>{selectedChat.name}</ContactName>
+          <ContactName>{selectedChat.userId}</ContactName>
         </ProfileInfo>
       </ProfileHeader>
       <MessageContainer>
         {messageList.map((messageData) => (
-          <MessageDiv isYours={messageData.senderID === 0}>
+          <div ref={scrollref}>
+      <MessageDiv isYours={messageData.senderID === 0}>
             <Message isYours={messageData.senderID === 0}>
               {messageData.text}
             </Message>
           </MessageDiv>
+          </div>
+    
         ))}
       </MessageContainer>
 

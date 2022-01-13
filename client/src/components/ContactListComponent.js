@@ -108,12 +108,12 @@ const ProfileInfoDivLeft=styled.div`
  
 `
 const ContactComponent = (props) => {
-  const { userData, setChat } = props;
+  const { userData, setChat, } = props;
   return (
     <ContactItem onClick={() => setChat(userData)}>
       <ProfileIcon src={userData.profilePic} />
       <ContactInfo>
-        <ContactName>{userData?.name}</ContactName>
+        <ContactName>{userData?.userId}</ContactName>
         <MessageText>{userData?.lastText}</MessageText>
       </ContactInfo>
       <MessageTime> {userData?.lastTextTime}</MessageTime>
@@ -121,6 +121,8 @@ const ContactComponent = (props) => {
   );
 };
 function ContactListComponent(props) {
+  const {allusers}=props
+  console.log(allusers)
   return (
     <Container>
       <ProfileInfoDiv>
@@ -139,7 +141,7 @@ function ContactListComponent(props) {
           <SearchInput placeholder="Search or start new chat" />
         </SearchContainer>
       </SearchBox>
-      {contactList.map((userData) => (
+      {allusers.map((userData) => (
         <ContactComponent userData={userData} setChat={props.setChat} />
       ))}
     </Container>
