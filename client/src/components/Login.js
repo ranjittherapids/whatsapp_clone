@@ -1,10 +1,13 @@
 import React from "react";
+import { useDispatch } from 'react-redux'
+import {create_user} from '../redux/action'
 import { Formik, Field,Form } from "formik";
 import GoogleLogin from 'react-google-login';
 import "./loginpage.css";
 export default function Login() {
+  const dispatch = useDispatch()
     const responseGoogle=(response)=>{
-        console.log(response)
+    dispatch(create_user(response.profileObj))
     }
   return (
     <div className=" d-flex flex-column justify-content-center align-items-center border border-danger">

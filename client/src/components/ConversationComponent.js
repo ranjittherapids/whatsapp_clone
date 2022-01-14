@@ -187,7 +187,7 @@ function ConversationComponent(props) {
             } }
           /> 
         </SearchContainer>
-        <SendIcon  >
+        <SendIcon>
        {sendvoiceicon?<Send onClick={sendMessage}/>:<Mic/>}
        </SendIcon>
       </ChatBox>
