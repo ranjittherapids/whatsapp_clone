@@ -113,7 +113,7 @@ const ContactComponent = (props) => {
     <ContactItem onClick={() => setChat(userData)}>
       <ProfileIcon src={userData.profilePic} />
       <ContactInfo>
-        <ContactName>{userData?.userId}</ContactName>
+        <ContactName>{userData?.name}</ContactName>
         <MessageText>{userData?.lastText}</MessageText>
       </ContactInfo>
       <MessageTime> {userData?.lastTextTime}</MessageTime>
@@ -140,8 +140,8 @@ function ContactListComponent(props) {
           <SearchInput placeholder="Search or start new chat" />
         </SearchContainer>
       </SearchBox>
-      {allusers.map((userData) => (
-        <ContactComponent userData={userData} setChat={props.setChat} />
+      {allusers?.map((userData,index) => (
+        <ContactComponent key={index} userData={userData} setChat={props.setChat} />
       ))}
     </Container>
   );

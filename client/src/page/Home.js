@@ -1,9 +1,11 @@
 import React, { useState,useEffect,useRef } from "react";
+import {useDispatch} from 'react-redux'
 import styled from "styled-components";
 import ContactListComponent from "../components/ContactListComponent";
 import ConversationComponent from "../components/ConversationComponent";
-import { io } from "socket.io-client";
+import { useSelector } from "react-redux";
 //import { contactList } from "./mockData";
+import {get_user} from '../redux/action'
 const Container = styled.div`
   display: flex;
   height: 100vh;
@@ -34,27 +36,31 @@ const Placeholder = styled.div`
   }
 `;
 function Home() {
+  const dispatch = useDispatch()
   const [selectedChat, setChat] = useState();
+  const [socket, setsocket] = useState(null)
   const [adduser,setadduser]= useState();
   const [allusers, setallusers] = useState([])
   const [messageList, setMessageList] = useState()
   const [arivalmessage, setarivalmessage] = useState(null)
   const [ok,setok]= useState(false);
-  const socket = useRef(io('http://localhost:8000',{ transports: ["websocket",'polling']}))
-  // useEffect(() => {
-  //   socket.current.emit('adduser',user_id)
-  // },[user])
+const selector = useSelector(state => state)
   useEffect(() => {
-    socket.current.emit('adduser',{userId:adduser})
-    socket.current.on('getuser',user=>setallusers(user))
-    sessionStorage.setItem("user", adduser);
-    //document.cookie =`user=${adduser}`;
-    localStorage.setItem('user',JSON.stringify(adduser))
+    setsocket(selector?.socket)
+   setallusers(selector?.allusers.data)
+   selector?.socket?.current?.on('getmessage',messages=>{
+    setMessageList([messageList,{
+      sender:messages.senderId,
+      text:messages.text,
+      createAt:Date.now()
+    }])
+    console.log(messages,messageList,'from app man ')
+  })
+  },[selector])
+   
 
-  },[ok])
    useEffect(() => {
-    socket.current.on('getuser',user=>setallusers(user))
-    socket.current.on('getmessage',messages=>{
+    socket?.current?.on('getmessage',messages=>{
       setMessageList([messageList,{
         sender:messages.senderId,
         text:messages.text,
@@ -62,6 +68,7 @@ function Home() {
       }])
       console.log(messages,messageList,'from app man ')
     })
+    dispatch(get_user())
    },[])
   return (
     <Container>

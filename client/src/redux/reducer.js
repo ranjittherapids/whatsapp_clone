@@ -1,12 +1,17 @@
+
 const initialvalue={
-    user:""
+    allusers:"",
+    socket:""
 }
 
 export const reducer=((state=initialvalue,action)=>{
 const{type,payload}=action
 switch(type){
-    case "CREATE_USER":{
-return {...state,user:payload}
+    case "GET_USER":{
+        return {...state,allusers:payload}
+    }
+    case "CONNECT_SOCKET":{
+        return {...state,socket:payload}   
     }
     default :{
         return{...state}

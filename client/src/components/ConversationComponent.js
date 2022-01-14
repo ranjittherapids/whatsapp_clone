@@ -99,14 +99,15 @@ function ConversationComponent(props) {
   const [receiverId, setreceiverId] = useState('');
   const [sendvoiceicon, setsendvoiceicon] = useState(false)
    const scrollref = useRef( )
+   const userinfo =JSON.parse(sessionStorage.getItem("userinfo")) 
   const onEnterPress = (event) => {
     setsendvoiceicon(false)
     if (event.key === "Enter") {
       const messages = [...messageList];
       const sender = sessionStorage.getItem("user");
       setText("");
-      socket.current.emit('sendmessage',{
-        senderId:sender,
+      socket?.current?.emit('sendmessage',{
+        senderId:userinfo.socketId,
         receiverId:receiverId,
         text:text
       })
@@ -114,8 +115,8 @@ function ConversationComponent(props) {
     }
   };
   const sendMessage=()=>{
-    socket.current.emit('sendmessage',{
-      senderId:"ranjit",
+    socket?.current?.emit('sendmessage',{
+      senderId:userinfo.socketId,
       receiverId:receiverId,
       text:text
     })
@@ -124,8 +125,7 @@ function ConversationComponent(props) {
     setText("");
   }
   useEffect(()=>{
-    setreceiverId(selectedChat.userId)
-  //  console.log(selectedChat,'selectedChat')
+    setreceiverId(selectedChat.socketId)
   },[selectedChat])
 
   useEffect(() => {
@@ -137,7 +137,7 @@ function ConversationComponent(props) {
       <ProfileHeader>
         <ProfileInfo>
           <ProfileImage src={selectedChat.profilePic} />
-          <ContactName>{selectedChat.userId}</ContactName>
+          <ContactName>{selectedChat.name}</ContactName>
         </ProfileInfo>
       </ProfileHeader>
       <MessageContainer>
