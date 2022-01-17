@@ -3,11 +3,12 @@ const HTTP="http://localhost:8000"
 export const create_user=(data,navigate)=>dispatch=>{
 axios.post(`${HTTP}/crud/create_user`,data)
 .then(response=>{
+    console.log("wow man ")
     dispatch({
         type:"CREATE_USER",
         payload:response.data
     })
-sessionStorage.setItem('userinfo',JSON.stringify(response.data.data));
+    sessionStorage.setItem('userinfo',JSON.stringify(response.data.data));
     navigate("/home");
 })
 .catch(err=>{

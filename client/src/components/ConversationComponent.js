@@ -99,12 +99,11 @@ function ConversationComponent(props) {
   const [receiverId, setreceiverId] = useState('');
   const [sendvoiceicon, setsendvoiceicon] = useState(false)
    const scrollref = useRef( )
-   const userinfo =JSON.parse(sessionStorage.getItem("userinfo")) 
+   const userinfo =JSON.parse(sessionStorage.getItem("userinfo"));
   const onEnterPress = (event) => {
     setsendvoiceicon(false)
     if (event.key === "Enter") {
       const messages = [...messageList];
-      const sender = sessionStorage.getItem("user");
       setText("");
       socket?.current?.emit('sendmessage',{
         senderId:userinfo.socketId,
@@ -196,3 +195,5 @@ function ConversationComponent(props) {
 }
 
 export default ConversationComponent;
+
+
