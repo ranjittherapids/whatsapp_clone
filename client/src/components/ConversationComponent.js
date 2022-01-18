@@ -2,11 +2,11 @@ import React, { useState,useEffect, useRef } from "react";
 import styled from "styled-components";
 import { SearchContainer} from "./ContactListComponent";
 import Picker from "emoji-picker-react";
-//import { messagesList } from "../mockData";
+import {useDispatch,useSelector} from 'react-redux'
 import Send from '@material-ui/icons/Send';
 import Mic from '@material-ui/icons/Mic';
 import AttachFile from '@material-ui/icons/AttachFile';
-
+import {create_chat,get_chat} from '../redux/action'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -99,33 +99,41 @@ function ConversationComponent(props) {
   const [receiverId, setreceiverId] = useState('');
   const [sendvoiceicon, setsendvoiceicon] = useState(false)
    const scrollref = useRef( )
+   const dispatch = useDispatch()
+   const selector = useSelector(state => state)
    const userinfo =JSON.parse(sessionStorage.getItem("userinfo"));
   const onEnterPress = (event) => {
     setsendvoiceicon(false)
     if (event.key === "Enter") {
-      const messages = [...messageList];
       setText("");
       socket?.current?.emit('sendmessage',{
-        senderId:userinfo.socketId,
-        receiverId:receiverId,
+        senderId:userinfo.userId,
+        receiverId:receiverId.socketId,
         text:text
       })
-     
+      dispatch(create_chat(userinfo.userId,receiverId.userId,text))
+      dispatch(get_chat(receiverId.userId))
     }
+    
   };
   const sendMessage=()=>{
     socket?.current?.emit('sendmessage',{
-      senderId:userinfo.socketId,
-      receiverId:receiverId,
+      senderId:userinfo.userId,
+      receiverId:receiverId.socketId,
       text:text
     })
-  
+    dispatch(create_chat(userinfo.userId,receiverId.userId,text))
+    dispatch(get_chat(receiverId.userId))
     setsendvoiceicon(false)
     setText("");
   }
   useEffect(()=>{
-    setreceiverId(selectedChat.socketId)
+    setreceiverId({socketId:selectedChat.socketId,userId:selectedChat.userId})
   },[selectedChat])
+
+useEffect(() => {
+console.log(selector,'wow')
+},[selector])
 
   useEffect(() => {
     scrollref?.current?.scrollIntoView({behavior:"smooth"}) 

@@ -47,18 +47,27 @@ function Home() {
 const selector = useSelector(state => state)
   useEffect(() => {
     setsocket(selector?.socket)
-   setallusers(selector?.allusers.data)
+   setallusers(selector?.allusers?.data)
    selector?.socket?.current?.on('getmessage',messages=>{
     setMessageList([messageList,{
       sender:messages.senderId,
       text:messages.text,
       createAt:Date.now()
     }])
-    console.log(messages,messageList,'from app man ')
+    console.log(messages,'app')
   })
+ 
+    //  console.log(selector.allusers.data,'from app man ')
+      selector.allusers && selector.allusers.data.map(data=>{
+       // console.log(data,"data")
+        const userinfo =JSON.parse(sessionStorage.getItem("userinfo"));
+        if(data._id==userinfo._id){
+          sessionStorage.setItem('userinfo',JSON.stringify(data));
+          //console.log(data,'wow')
+        }
+      })
   },[selector])
-   
-
+ 
    useEffect(() => {
     socket?.current?.on('getmessage',messages=>{
       setMessageList([messageList,{
@@ -66,13 +75,16 @@ const selector = useSelector(state => state)
         text:messages.text,
         createAt:Date.now()
       }])
-      console.log(messages,messageList,'from app man ')
+      console.log(messages,'from app man ')
     })
-    dispatch(get_user())
+ setTimeout(()=>{
+  dispatch(get_user())
+ },1000)
+    
    },[])
   return (
     <Container>
-      <ContactListComponent allusers={allusers} setChat={setChat} />
+      <ContactListComponent allusers={allusers && allusers} setChat={setChat} />
       {selectedChat ? (
         <ConversationComponent arivalmessage={arivalmessage} socket={socket} selectedChat={selectedChat} />
       ) : (

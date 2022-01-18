@@ -1,7 +1,8 @@
 
 const initialvalue={
     allusers:"",
-    socket:""
+    socket:"",
+    chat:""
 }
 
 export const reducer=((state=initialvalue,action)=>{
@@ -12,6 +13,9 @@ switch(type){
     }
     case "CONNECT_SOCKET":{
         return {...state,socket:payload}   
+    }
+    case "CREATE_CHAT":{
+        return {...state,chat:payload}   
     }
     default :{
         return{...state}

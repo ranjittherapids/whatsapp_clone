@@ -140,7 +140,7 @@ function ContactListComponent(props) {
           <SearchInput placeholder="Search or start new chat" />
         </SearchContainer>
       </SearchBox>
-      {allusers?.map((userData,index) => (
+      {allusers && allusers?.map((userData,index) => (
         <ContactComponent key={index} userData={userData} setChat={props.setChat} />
       ))}
     </Container>
