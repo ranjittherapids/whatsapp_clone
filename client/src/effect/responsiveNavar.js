@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter,Switch,Route,NavLink} from "react-router-dom"
 import './effect.css'
-export default function Effect() {
+export default function ResponsiveNavar() {
     const [click, setClick] = React.useState(false);
 
     const handleClick = () => setClick(!click);
