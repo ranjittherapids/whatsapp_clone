@@ -1,0 +1,23 @@
+.rdw-editor-toolbar{
+    display: flex;
+
+    /* display: none !important; */
+}
+.rdw-editor-toolbar>div{
+    padding:3px 5px;
+    border: 1px solid gray;
+}
+.rdw-dropdown-optionwrapper{
+
+    padding:3px 5px;
+ 
+}
+.rdw-dropdown-optionwrapper>div{
+    border: 1px solid gray;
+}
+.rdw-dropdown-optionwrapper>div:hover{
+    background-color: gray;
+}
+/* .public-DraftStyleDefault-block {
+ 
+} */
