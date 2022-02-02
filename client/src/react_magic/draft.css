@@ -1,23 +1,23 @@
-.rdw-editor-toolbar{
-    display: flex;
-
-    /* display: none !important; */
-}
-.rdw-editor-toolbar>div{
-    padding:3px 5px;
-    border: 1px solid gray;
-}
-.rdw-dropdown-optionwrapper{
-
-    padding:3px 5px;
- 
-}
-.rdw-dropdown-optionwrapper>div{
-    border: 1px solid gray;
-}
-.rdw-dropdown-optionwrapper>div:hover{
-    background-color: gray;
-}
-/* .public-DraftStyleDefault-block {
- 
-} */
+ /* .rdw-editor-main{
+     box-shadow: .1rem .1rem .5rem    gray !important;
+     width: 95vw;
+     height:90vh !important;
+     margin: auto;
+     padding: 10px;
+ } */
+ .wrapper-class {
+    padding: 1rem;
+    border: 1px solid #ccc;
+  }
+  .editor-class {
+    background-color:lightgray;
+    padding: 1rem;
+    border: 1px solid #ccc;
+  }
+  .toolbar-class {
+    border: 1px solid #ccc;
+  }
+  .toolbar-class1{
+      display: none !important;
+      border: 1px solid red !important;
+  }
